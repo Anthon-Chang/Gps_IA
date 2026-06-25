@@ -1,0 +1,7 @@
+{
+  "name": "ionic-gps-bg",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
