@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>GPS Ionic Angular</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">GPS Ionic Angular</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <section class="status">
+    <ion-chip [color]="isTracking ? 'success' : 'medium'">
+      <ion-label>{{ isTracking ? 'GPS activo' : 'GPS detenido' }}</ion-label>
+    </ion-chip>
+  </section>
+
+  <ion-button expand="block" color="primary" [disabled]="isTracking" (click)="startTracking()">
+    Iniciar GPS
+  </ion-button>
+
+  <ion-button expand="block" color="danger" [disabled]="!isTracking" (click)="stopTracking()">
+    Detener GPS
+  </ion-button>
+
+  <ion-button expand="block" fill="outline" color="medium" [disabled]="locations.length === 0" (click)="clearLocations()">
+    Limpiar registros
+  </ion-button>
+
+  <ion-text color="danger" *ngIf="errorMessage">
+    <p>{{ errorMessage }}</p>
+  </ion-text>
+
+  <ion-list *ngIf="locations.length > 0; else emptyState">
+    <ion-list-header>
+      <ion-label>Ubicaciones registradas</ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="let location of locations">
+      <ion-label>
+        <h2>{{ location.latitude }}, {{ location.longitude }}</h2>
+        <p>Precision: {{ location.accuracy }} m</p>
+        <p>Velocidad: {{ location.speed || 0 }} m/s</p>
+        <p>{{ location.time }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #emptyState>
+    <div class="empty">
+      <h2>Sin registros todavia</h2>
+      <p>Inicia el GPS, minimiza la app y muevete para registrar ubicaciones.</p>
+    </div>
+  </ng-template>
+</ion-content>

@@ -1,0 +1,86 @@
+<ion-content [fullscreen]="true" class="dark-theme">
+  <!-- Header con fondo moderno -->
+  <div class="custom-header">
+    <div class="header-overlay"></div>
+    <div class="header-content">
+      <div class="logo-area">
+        <ion-icon name="navigate" class="logo-icon"></ion-icon>
+        <span class="app-title">BG-Tracker</span>
+      </div>
+      <div class="status-badge" [class.active]="isTracking">
+        <span class="dot"></span>
+        <span class="status-text">{{ isTracking ? 'RASTREANDO' : 'DETENIDO' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <!-- Panel del Mapa Mockup -->
+    <div class="glass-card map-card">
+      <div class="card-header">
+        <ion-icon name="map-outline" class="card-icon"></ion-icon>
+        <h2>Ruta en Tiempo Real</h2>
+      </div>
+      <div class="map-container">
+        <img src="assets/map_mockup.png" alt="Mapa de seguimiento" class="map-image" />
+        <div class="map-overlay" *ngIf="isTracking">
+          <div class="pulse-ring"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel de Estadísticas -->
+    <div class="grid-stats">
+      <div class="glass-card stat-item">
+        <span class="stat-label">Registros</span>
+        <span class="stat-value">{{ locations.length }}</span>
+      </div>
+      <div class="glass-card stat-item">
+        <span class="stat-label">Última Ubicación</span>
+        <span class="stat-value coords-value">{{ latestCoords }}</span>
+      </div>
+    </div>
+
+    <!-- Botones de Control -->
+    <div class="control-actions">
+      <button class="btn-primary" [class.btn-active]="isTracking" (click)="toggleTracking()">
+        <ion-icon [name]="isTracking ? 'stop-circle' : 'play-circle'" class="btn-icon"></ion-icon>
+        <span>{{ isTracking ? 'Detener Servicio' : 'Iniciar GPS' }}</span>
+      </button>
+
+      <button class="btn-secondary" (click)="clearHistory()" [disabled]="locations.length === 0">
+        <ion-icon name="trash-outline"></ion-icon>
+        <span>Limpiar Historial</span>
+      </button>
+    </div>
+
+    <!-- Historial de Ubicaciones -->
+    <div class="glass-card history-card">
+      <div class="card-header">
+        <ion-icon name="list-outline" class="card-icon"></ion-icon>
+        <h2>Historial de Ubicaciones</h2>
+      </div>
+      
+      <div class="history-list" *ngIf="locations.length > 0; else noData">
+        <div class="history-item" *ngFor="let loc of locations; let i = index">
+          <div class="item-index">#{{ locations.length - i }}</div>
+          <div class="item-details">
+            <span class="item-coords">Lat: {{ loc.latitude.toFixed(6) }}, Lng: {{ loc.longitude.toFixed(6) }}</span>
+            <span class="item-time">Registrado a las {{ loc.formattedTime }}</span>
+          </div>
+          <div class="item-badge-gps">
+            <ion-icon name="checkmark-circle" class="success-check"></ion-icon>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noData>
+        <div class="no-data-view">
+          <ion-icon name="location-outline" class="empty-icon"></ion-icon>
+          <p>No hay ubicaciones registradas aún.</p>
+          <span class="help-text">Presiona "Iniciar GPS" y desplázate o minimiza la app para comenzar el registro.</span>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ion-content>
